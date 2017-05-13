@@ -1,0 +1,2 @@
+FROM rickl/docker-scrapy
+
