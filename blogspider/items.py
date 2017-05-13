@@ -9,6 +9,19 @@ import scrapy
 
 
 class BlogspiderItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    crawler_name = scrapy.Field()
+    scrapinghub_id = scrapy.Field()
+    status = scrapy.Field()
+    badges = scrapy.Field()
+    embed = scrapy.Field()
+    url = scrapy.Field()
+    referer = scrapy.Field()
+    blog_host = scrapy.Field()
+    date = scrapy.Field()
+    title = scrapy.Field()
+    images = scrapy.Field()
+    tags = scrapy.Field()
+    raw_tags = scrapy.Field()
+    content = scrapy.Field()
+    comments = scrapy.Field()
+    links = scrapy.Field()
