@@ -16,6 +16,8 @@ import pdb
 POSTS_BLOCK_SELECTORS = '.date-outer .post-outer'
 POST_LINK_SELECTORS = '.post-title a::attr("href")'
 
+POST_SELECTOR = '.date-outer'
+
 POST_DATE_SELECTOR = '.date-header ::text'
 POST_TITLE_SELECTOR = '.post-title ::text'
 POST_IMAGES_SELECTOR = 'img::attr("src")'
@@ -58,6 +60,9 @@ class BlogspotSpider(CrawlSpider):
         self.POSTS_BLOCK_SELECTORS = settings.get('POSTS_BLOCK_SELECTORS', POSTS_BLOCK_SELECTORS)
         self.POST_LINK_SELECTORS = settings.get('POST_LINK_SELECTORS', POST_LINK_SELECTORS)
         self.LINKS_SELECTORS = settings.get('LINKS_SELECTORS', LINKS_SELECTORS)
+        self.PREV_POSTS_LINKS_SELECTORS = settings.get('PREV_POSTS_LINKS_SELECTORS', PREV_POSTS_LINKS_SELECTORS)
+
+        self.POST_SELECTOR = settings.get('POST_SELECTOR', POST_SELECTOR)
 
         self.POST_DATE_SELECTOR = settings.get('POST_DATE_SELECTOR', POST_DATE_SELECTOR)
         self.POST_TITLE_SELECTOR = settings.get('POST_TITLE_SELECTOR', POST_TITLE_SELECTOR)
@@ -82,7 +87,7 @@ class BlogspotSpider(CrawlSpider):
         super(BlogspotSpider, self).__init__(*args, **kwargs)
 
     def parse(self, response):
-        posts = response.css(POSTS_BLOCK_SELECTORS)
+        posts = response.css(self.POSTS_BLOCK_SELECTORS)
         for post in posts:
             post_link = post.css(POST_LINK_SELECTORS).extract()[0]
             if(not post_link in self.visited):
@@ -92,7 +97,7 @@ class BlogspotSpider(CrawlSpider):
         links = response.css(self.LINKS_SELECTORS).extract()
         try:
             links.append(
-                    response.css(PREV_POSTS_LINKS_SELECTORS).extract()[0]
+                    response.css(self.PREV_POSTS_LINKS_SELECTORS).extract()[0]
             )
         except:
             pass
@@ -105,7 +110,7 @@ class BlogspotSpider(CrawlSpider):
 
     def parse_post(self, response):
         item = BlogspiderItem()
-        post = response.css('.date-outer')
+        post = response.css(self.POST_SELECTOR)
 
         item["crawler_name"] = "BlogPostItem"
 
