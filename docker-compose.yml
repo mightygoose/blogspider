@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+  blogspot:
+    build: .
+    volumes:
+      - .:/app
+    command: [
+      'crawl',
+      'blogspot',
+      '-s', 'BLOGSPOT_URLS_ENDPOINT=${BLOGSPOT_URLS_ENDPOINT}',
+      '-s', 'DEPTH_LIMIT=${DEPTH_LIMIT}',
+      '-s', 'MG_PIPELINE_URL=${MG_PIPELINE_URL}',
+    ]
+  nnm:
+    extends: blogspot
+    command: [
+      'crawl',
+      'nnm',
+      '-s', 'DEPTH_LIMIT=${DEPTH_LIMIT}',
+      '-s', 'MG_PIPELINE_URL=${MG_PIPELINE_URL}',
+    ]
+  xorosho:
+    command: [
+      'crawl',
+      'xorosho',
+      '-s', 'DEPTH_LIMIT=${DEPTH_LIMIT}',
+      '-s', 'MG_PIPELINE_URL=${MG_PIPELINE_URL}',
+    ]
+    extends: blogspot
